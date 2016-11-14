@@ -15,8 +15,9 @@ public class MainPanel extends JPanel{
 	//Constructor
 	public MainPanel(MakingPanel m) {
 		
+		
 		this.setPreferredSize(new Dimension(800,450));
-		this.setBackground(Color.WHITE);
+		this.setBackground(new Color(50,200,10));
 		this.setLayout(null);
 		
 		mainL = new MainListener();
@@ -31,21 +32,21 @@ public class MainPanel extends JPanel{
 		
 		
 		Font btnFont = new Font("Verdana", Font.PLAIN, 25);
-		btn1p = new JButton("1P");
+		btn1p = new JButton(new ImageIcon("img/btn1p.png"));
 		btn1p.setFont(btnFont);
-		btn1p.setBounds(100, 300, 200, 50);
+		btn1p.setBounds(300, 250, 200, 45);
 		btn1p.addActionListener(mainL);
 		this.add(btn1p);
 		
-		btn2p = new JButton("2P");
+		btn2p = new JButton(new ImageIcon("img/btn2p.png"));
 		btn2p.setFont(btnFont);
-		btn2p.setBounds(300, 300, 200, 50);
+		btn2p.setBounds(300, 300, 200, 45);
 		btn2p.addActionListener(mainL);
 		this.add(btn2p);
 		
-		btnCredit = new JButton("Credit");
+		btnCredit = new JButton(new ImageIcon("img/btncredit.png"));
 		btnCredit.setFont(btnFont);
-		btnCredit.setBounds(500, 300, 200, 50);
+		btnCredit.setBounds(300, 350, 200, 45);
 		btnCredit.addActionListener(mainL);
 		this.add(btnCredit);
 		

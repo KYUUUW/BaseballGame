@@ -24,6 +24,7 @@ public class BaseballExam {
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		MakingPanel primary = new MakingPanel();
+		
 		fr.getContentPane().add(primary);
 		fr.pack();
 		fr.setVisible(true);
