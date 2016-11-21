@@ -4,7 +4,7 @@ import javax.swing.*;
 public class MakingPanel extends JPanel{
 
 	private MainPanel		panMainPanel;
-	private PlayOperation	panPlayOperation;
+	private PlayScreen		panPlayScreen;
 	private Credit			panCredit;
 	
 	public MakingPanel() {
@@ -24,16 +24,16 @@ public class MakingPanel extends JPanel{
 	
 	public void exe1pPanel(){
 		removeAll();
-		panPlayOperation = new PlayOperation(this, 1);
-		this.add(panPlayOperation);
+		panPlayScreen = new PlayScreen(this, 1);
+		this.add(panPlayScreen);
 		revalidate();
 		repaint();
 	}
 	
 	public void exe2pPanel() {
 		removeAll();
-		panPlayOperation = new PlayOperation(this, 2);
-		this.add(panPlayOperation);
+		panPlayScreen = new PlayScreen(this, 2);
+		this.add(panPlayScreen);
 		revalidate();
 		repaint();
 	}
