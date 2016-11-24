@@ -20,13 +20,7 @@ public class BaseballExam {
 	
 	public static void main(String ar[]) {
 		
-		JFrame fr = new JFrame("UI Practice");
-		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		MakingPanel primary = new MakingPanel();
-		fr.getContentPane().add(primary);
-		fr.pack();
-		fr.setVisible(true);
+		BaseballFrame fr = new BaseballFrame();
 		
 		//fr.setResizable(false);
 		
