@@ -9,6 +9,8 @@ public class RecordPanel extends JPanel
 	private RecordData data;
 	private ArrayList<RecordData> dataList;
 	private String strRecord;
+	
+
 
 	//constructor
 	public RecordPanel() {
@@ -29,48 +31,36 @@ public class RecordPanel extends JPanel
 		
 //		ptRecord = new Point(70, 80);
 		
-		strRecord = new String(String.valueOf(data.getRecord())+"  "+
-								String.valueOf(data.getStrike())+"S"+
-								String.valueOf(data.getBall())+"B "); //saving int value to string
+		//strRecord = new String(""+data.getRecord());
 		
-		
-		//lblRecord = new JLabel("<html>Record<br>new line</html>"+strRecord);
-		lblRecord = new JLabel(strRecord);
+		lblRecord = new JLabel("<html>Record<br>new line</html>");
 		lblRecord.setBounds(50,70,100,300);
 		lblRecord.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRecord.setVerticalAlignment(SwingConstants.TOP);
 		lblRecord.setForeground(Color.white);
 		lblRecord.setFont(new Font("Verdana", Font.PLAIN, 15));
 		//lblRecord.setText(strRecord);
-		lblRecord.setVisible(false);
 		lblRecord.setLayout(null);
 		this.add(lblRecord);
 	
 	}
 	
 	
-	public void addText(int input, int strike, int ball){
+	public void addText(String str){
 		
-		lblRecord.setVisible(true);
 		
-		data.setRSB(input, strike, ball);
-		
-		strRecord = String.valueOf(data.getRecord())+"  "+
-								String.valueOf(data.getStrike())+"S"+
-								String.valueOf(data.getBall())+"B ";
-		
-		lblRecord.setText(lblRecord.getText()+"\r\n"+strRecord);
-		this.add(lblRecord);
 		
 	} // addText()
 	
-	
-	//??????
-	public void refresh() {
-		lblRecord.setText("New text");
-		this.add(lblRecord);
+	public void rePaint() {
+		removeAll();
 		
-	} // refresh()
+		
+		revalidate();
+		repaint();
+
+		
+	} // rePaint()
 	
 	
 	
