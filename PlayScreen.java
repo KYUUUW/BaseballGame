@@ -52,6 +52,8 @@ public class PlayScreen extends JPanel {
 
 	private GameListener gameL;
 	
+	private MoveBallLabel mvBall;
+	
 	//record
 	private RecordPanel record1p, record2p;
 	private int nRecordX = 200; //size조정용    
@@ -427,6 +429,14 @@ public class PlayScreen extends JPanel {
 				
 				drawBalls(scoreBoardStrike, scoreBoardBall);
 				lblCount.setText("Count = " + Count);
+				
+				//쓰레드 구현
+				//-----------------------------------------
+				mvBall = new MoveBallLabel();
+				mvBall.setBounds(0, -100, 200, 200);
+				rightPanel.add(mvBall);
+				mvBall.start();
+				//-----------------------------------------
 
 				if (nInput == nRandom) {
 					// lblResultS.setText("RIGHT");
