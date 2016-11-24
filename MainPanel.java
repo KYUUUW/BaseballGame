@@ -15,10 +15,13 @@ public class MainPanel extends JPanel{
 	//Constructor
 	public MainPanel(MakingPanel m) {
 		
+		making = m;
 		
 		this.setPreferredSize(new Dimension(800+200,450));
 		this.setBackground(new Color(50,200,10));
 		this.setLayout(null);
+		
+		making.setFrameSize(BaseballConstants.SIZE_MAIN);
 		
 		mainL = new MainListener();
 		

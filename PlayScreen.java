@@ -99,6 +99,7 @@ public class PlayScreen extends JPanel {
 
 	private void onePlayer() { // 1P 일 경우rightPanel = new JPanel();
 		
+		making.setFrameSize(BaseballConstants.SIZE_1P);
 		//rightPanel	
 		rightPanel.setBounds(0+nRecordX, 0, 800+nRecordX, 500);
 		rightPanel.setOpaque(false); // 투명
@@ -168,9 +169,13 @@ public class PlayScreen extends JPanel {
 		record1p.setBounds(0,10,200,450);
 		this.add(record1p);
 		
+		
+		
 	}
 
 	private void twoPlayer() { // 2P일 경우
+		
+		making.setFrameSize(BaseballConstants.SIZE_2P);
 		
 		//rightPanel 2p size
 		rightPanel.setBounds(0+nRecordX, 0, 800+nRecordX+nRecordX, 500);
@@ -417,8 +422,8 @@ public class PlayScreen extends JPanel {
 				judgement(nInput); // 2P에서 계속 사용될 예정이라 메소드를 만듬
 				Count++;
 				
-				//record1p.setRSB(nInput, Strike, Ball); //record1p에 값 
-				record1p.addText(nInput, Strike, Ball);
+				record1p.setRSB(nInput, Strike, Ball); //record1p에 값 
+				
 				
 				drawBalls(scoreBoardStrike, scoreBoardBall);
 				lblCount.setText("Count = " + Count);

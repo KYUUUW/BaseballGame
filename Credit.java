@@ -13,10 +13,13 @@ public class Credit extends JPanel {
 	
 	
 	public Credit (MakingPanel m) {
+		making = m;
 		
 		this.setPreferredSize(new Dimension(800,450));
 		this.setBackground(Color.WHITE);
 		this.setLayout(null);
+		
+		making.setFrameSize(BaseballConstants.SIZE_CREDIT);
 		
 		gameL = new GameListener();
 		
@@ -25,7 +28,7 @@ public class Credit extends JPanel {
 		lbl.setBounds(100, 100, 500, 50);
 		this.add(lbl); 
 		
-		making = m;
+		
 		btnHome = new JButton(making.getHomeIcon());
 		btnHome.setBounds(20, 20, 50, 50);
 		btnHome.addActionListener(gameL);

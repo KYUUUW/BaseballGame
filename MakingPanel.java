@@ -7,13 +7,21 @@ public class MakingPanel extends JPanel{
 	private PlayScreen		panPlayScreen;
 	private Credit			panCredit;
 	private ImageIcon home = new ImageIcon("img/Home.png");
+	private BaseballFrame frame;
 	
-	public MakingPanel() {
+	public MakingPanel(BaseballFrame fr) {
+		frame = fr;
+		
 		removeAll();
 		panMainPanel = new MainPanel(this);
 		this.add(panMainPanel);
 		revalidate();
 		repaint();
+		
+	}
+	
+	public void setFrameSize(Dimension d) {
+		frame.setSize(d);
 	}
 	
 	// get, set
