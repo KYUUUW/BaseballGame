@@ -422,8 +422,8 @@ public class PlayScreen extends JPanel {
 				judgement(nInput); // 2P에서 계속 사용될 예정이라 메소드를 만듬
 				Count++;
 				
-				record1p.setRSB(nInput, Strike, Ball); //record1p에 값 
-				
+				//record1p.setRSB(nInput, Strike, Ball); //record1p에 값 
+				record1p.addText(nInput, Strike, Ball);
 				
 				drawBalls(scoreBoardStrike, scoreBoardBall);
 				lblCount.setText("Count = " + Count);
