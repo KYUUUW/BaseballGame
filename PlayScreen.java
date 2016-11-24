@@ -443,6 +443,8 @@ public class PlayScreen extends JPanel {
 					System.out.println(Strike + " " + Ball);
 					drawBalls(sBoard1p_S,sBoard1p_B);
 					lblCount.setText("Count = " + Count);
+					
+					record1p.addText(n, Strike, Ball);
 				}
 				else {
 					System.out.println("1P not judging");
@@ -459,6 +461,8 @@ public class PlayScreen extends JPanel {
 					System.out.println(Strike + " " + Ball);
 					drawBalls(sBoard2p_S,sBoard2p_B);
 					lblCount.setText("Count = " + Count);
+					
+					record2p.addText(n, Strike, Ball);
 				}
 				else {
 					System.out.println("2P not judging");
