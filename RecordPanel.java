@@ -13,7 +13,7 @@ public class RecordPanel extends JPanel
 	//constructor
 	public RecordPanel() {
 		setPreferredSize(new Dimension(200,450));
-		setBackground(Color.black);
+		setBackground(new Color(29,29,27));
 		setLayout(null);
 
 		data = new RecordData();
