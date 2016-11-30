@@ -66,10 +66,12 @@ public class RecordPanel extends JPanel
 		this.add(lblRecord);*/ //전의 태그
 		
 		strTemp = lblRecord.getText();
-		strTemp = strTemp.substring(0 , strTemp.length() - 8);
-		strTemp = strTemp.concat(String.valueOf(data.getRecord())+"  "+
+		strTemp = strTemp.substring(6 , strTemp.length() - 8);
+		strTemp = "<html>" +
 				String.valueOf(data.getStrike())+"S"+
-				String.valueOf(data.getBall())+ "B " + "<br/>  </html>"); //뒤에 문자열 받아서 리턴해줌
+				String.valueOf(data.getBall())+ "B " + 
+				String.valueOf(data.getRecord()) + "<br/>" +
+				strTemp + "</html>"; 
 		System.out.println(strTemp);
 		lblRecord.setText(strTemp);
 		this.add(lblRecord);
