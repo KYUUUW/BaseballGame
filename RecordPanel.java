@@ -71,7 +71,7 @@ public class RecordPanel extends JPanel
 				String.valueOf(data.getStrike())+"S"+
 				String.valueOf(data.getBall())+ "B " + 
 				String.valueOf(data.getRecord()) + "<br/>" +
-				strTemp + "</html>"; 
+				strTemp + " </html>"; 
 		System.out.println(strTemp);
 		lblRecord.setText(strTemp);
 		this.add(lblRecord);
