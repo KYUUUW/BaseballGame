@@ -11,5 +11,6 @@ public class BaseballFrame extends JFrame {
 		getContentPane().add(primary);
 		pack();
 		setVisible(true);
+		setResizable(false);
 	}
 }

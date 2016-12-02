@@ -57,14 +57,6 @@ public class RecordPanel extends JPanel
 		lblRecord.setVisible(true);
 		data.setRSB(input, strike, ball);
 		
-		/*strRecord = String.valueOf(data.getRecord())+"  "+
-								String.valueOf(data.getStrike())+"S"+
-								String.valueOf(data.getBall())+"B ";
-		
-		lblRecord.setText(lblRecord.getText()+"\r\n"+strRecord);
-		System.out.println(lblRecord.getText()+"\r\n"+strRecord);
-		this.add(lblRecord);*/ //전의 태그
-		
 		strTemp = lblRecord.getText();
 		strTemp = strTemp.substring(6 , strTemp.length() - 8);
 		strTemp = "<html>" +
