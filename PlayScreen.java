@@ -36,27 +36,27 @@ public class PlayScreen extends JPanel {
 	private MakingPanel making;
 	private Image bgimg = null;
 
-	private int nRandom, n_1p, n_2p;
-	private int a, b, c, Ra, Rb, Rc, Strike, Ball, Count;
+	private int nRandom;
+	private int Strike, Ball, Count;
+	
 	private int nInput, nPlay;
 
-	private int arr_1p[], arr_2p[];
 	private int num_1p, num_2p;
 
 	private ImageIcon greenball = new ImageIcon("img/greenball.png");
 	private ImageIcon yellowball = new ImageIcon("img/yellowball.png");
 	private ImageIcon black = new ImageIcon("img/black.png");
 
-	private JLabel greenball1, greenball2, greenball3, 
+/*	private JLabel greenball1, greenball2, greenball3, 
 					yellowball1, yellowball2, yellowball3;
-	private JLabel black1, black2, black3;
+	private JLabel black1, black2, black3;*/
 
 	private GameListener gameL;
 	private MoveBallLabel mvBall;
 
 	// record
 	private RecordPanel record1p, record2p;
-	private int nRecordX = 200; // size조정용
+	private final int nRecordX = 200; // size조정용
 
 	public PlayScreen(MakingPanel m, int nPlayer) {
 
@@ -68,23 +68,13 @@ public class PlayScreen extends JPanel {
 
 		gameL = new GameListener();
 
-		this.setBackground(Color.white);
+		this.setBackground(Color.black);
 		this.setLayout(null);
 
 		making = m;
 
-		// leftPanel = new JPanel();
-		// leftPanel.setBounds(5, 5, 390, 440);
-		// leftPanel.setBackground(Color.WHITE);
-		// leftPanel.setLayout(null);
-		// add(leftPanel);
 
 		rightPanel = new JPanel();
-		/*
-		 * rightPanel.setBounds(0+nRecordX, 0, 800+nRecordX, 500);
-		 * rightPanel.setOpaque(false); // 투명 rightPanel.setLayout(null);
-		 * add(rightPanel);
-		 */
 
 		btnHome = new JButton(making.getHomeIcon());
 		btnHome.setBounds(20, 20, 50, 50);
@@ -110,14 +100,7 @@ public class PlayScreen extends JPanel {
 		// 예외 처리 : 0 안나오게, 111이하의 수 제거, 같은수 반복 제거
 		do {
 			nRandom = (int) (Math.random() * 999) + 1;
-
-			Ra = nRandom / 100;
-			Rb = (nRandom / 10) % 10;
-			Rc = nRandom % 10;
-
-		} while (Ra == 0 || Rb == 0 || Rc == 0 || // 0 안나오게
-				nRandom < 111 || // 111이하의 수 제거
-				Ra == Rb || Rb == Rc || Rc == Ra); // 같은수 반복 제거
+		} while (!PropChk(nRandom)); // 같은수 반복 제거
 
 		System.out.println(nRandom);
 
@@ -155,13 +138,6 @@ public class PlayScreen extends JPanel {
 		btnInput.setFont(new Font("Verdana", Font.PLAIN, 15));
 		rightPanel.add(btnInput);
 
-		/*
-		 * lblRecord = new JLabel("Record..."); lblRecord.setBounds(25, 155,
-		 * 350, 250); lblRecord.setFont(new Font("Verdana", Font.PLAIN, 10));
-		 * lblRecord.setForeground(Color.BLACK);
-		 * lblRecord.setVerticalAlignment(SwingConstants.TOP);
-		 * rightPanel.add(lblRecord);
-		 */
 
 		// record
 		record1p = new RecordPanel();
@@ -257,8 +233,8 @@ public class PlayScreen extends JPanel {
 
 		// 입력 받기
 
-		arr_1p = convertToArr(num_1p = inputDialog(1));
-		arr_2p = convertToArr(num_2p = inputDialog(2));
+		num_1p = inputDialog(1);
+		num_2p = inputDialog(2);
 
 	}
 
@@ -287,138 +263,66 @@ public class PlayScreen extends JPanel {
 		return arr;
 	}
 
-	private boolean PropChk(int in) {
+	
+	//----------유효성 검사---------//
+	//랜덤으로 생성되는 수나, 입력되는 수가 유효한 수인지 확인하고
+	//유효하면 true, 무효하면 false return
+	private boolean PropChk(int in) { 	//정수가 파라미터일 경우
 		int[] n = convertToArr(in);
-		return !(n[2] == 0 || n[1] == 0 || n[0] == 0 || in < 111
-				|| n[2] == n[1] || n[1] == n[0] || n[0] == n[2] || in > 999);
-	}
-
-	private boolean PropChk(int[] in) {
-		int[] n = in;
-		return !(n[2] == 0 || n[1] == 0 || n[0] == 0
-				|| (n[2] * 100 + n[1] * 10 + n[0]) < 111 || n[2] == n[1]
-				|| n[1] == n[0] || n[0] == n[2] || (n[2] * 100 + n[1] * 10 + n[0]) > 999 );
+		return PropChk(n); 				//중복되는 코드를 줄이기 위해 오버라이딩된 메소드 사용
 	}
 	
-	private boolean PropChk(String s) {
+	private boolean PropChk(String s) { //문자열이 파라미터인 경우
 		int n;
-		try {
+		try { 							//ParseInt로 들어온 문자열이 수가 아닌경우 NumberFormatException을 뱉는다.
 			n = Integer.parseInt(s);
-		}catch(NumberFormatException e){
+		}catch(NumberFormatException e){//무효한 문자열이므로 false 리턴한다.
 	        return false;
 	    } 
 		return PropChk(n);
 		
 	}
+
+	private boolean PropChk(int[] in) { //배열이 파라미터일 경우
+		int[] n = in;
+		return !(n[2] == 0 || n[1] == 0 || n[0] == 0			// 수에 0이 들어가는 경우
+				|| (n[2] * 100 + n[1] * 10 + n[0]) < 111 		// 세자리 수가 아닌경우
+				|| n[2] == n[1] || n[1] == n[0] || n[0] == n[2] //중복되는 수가 있는경우
+				|| (n[2] * 100 + n[1] * 10 + n[0]) > 999 ); 	//세자리 수가 넘는 경우
+	}
+	//---------유효성 검사----------//
 	
 
 	protected void paintComponent(Graphics g) {
 		g.drawImage(bgimg, 10 + nRecordX, 10, 780, 440, this);
 	}
 
-	private void judgement(int input) {
-		Strike = 0;
-		Ball = 0;
 
-		a = input / 100;
-		b = (input / 10) % 10;
-		c = input % 10;
-
-		// 효과 넣기
-
-		if (Ra == a || Ra == b || Ra == c) {
-			if (a == Ra) {
-				Strike++;
-				a = -1;
-			} else
-				Ball++;
-		}
-		if (Rb == a || Rb == b || Rb == c) {
-			if (b == Rb) {
-				Strike++;
-				b = -1;
-			} else
-				Ball++;
-		}
-		if (Rc == a || Rc == b || Rc == c) {
-			if (c == Rc) {
-				Strike++;
-				c = -1;
-			} else
-				Ball++;
-		}
-	}
-
-	private void judgement(int[] n) {
-
-		Strike = 0;
-		Ball = 0;
-
-		a = n[2];
-		b = n[1];
-		c = n[0];
-
-		// 효과 넣기
-
-		if (Ra == a || Ra == b || Ra == c) {
-			if (a == Ra) {
-				Strike++;
-				a = -1;
-			} else
-				Ball++;
-		}
-		if (Rb == a || Rb == b || Rb == c) {
-			if (b == Rb) {
-				Strike++;
-				b = -1;
-			} else
-				Ball++;
-		}
-		if (Rc == a || Rc == b || Rc == c) {
-			if (c == Rc) {
-				Strike++;
-				c = -1;
-			} else
-				Ball++;
-		}
-	}
-
+	//------ 점수 검사 메소드-------//
+	//두 수를 입력받고 비교해서 몇S 몇B 인지 판단해줌
 	private void judgement(int in, int set) {
+		
+		int[] arrSet = new int[3];
+		int[] arrIn = new int[3];
+		
 		Strike = 0;
 		Ball = 0;
-
-		a = in / 100;
-		b = (in / 10) % 10;
-		c = in % 10;
-
-		Ra = set / 100;
-		Rb = (set / 10) % 10;
-		Rc = set % 10;
-
-		// 효과 넣기
-
-		if (Ra == a || Ra == b || Ra == c) {
-			if (a == Ra) {
+		
+		arrSet = convertToArr(in);
+		arrIn = convertToArr(set);
+		
+		for (int i = 0; i <= 2; i++) {
+			for (int j = 0; j <= 2; j++) {
+				if (arrIn[i] == arrSet[j] && i != j) {
+					Ball++;
+				}
+			}
+			if (arrIn[i] == arrSet[i]) {
 				Strike++;
-				a = -1;
-			} else
-				Ball++;
-		}
-		if (Rb == a || Rb == b || Rb == c) {
-			if (b == Rb) {
-				Strike++;
-				b = -1;
-			} else
-				Ball++;
-		}
-		if (Rc == a || Rc == b || Rc == c) {
-			if (c == Rc) {
-				Strike++;
-				c = -1;
-			} else
-				Ball++;
+			}
 		}
 	}
+	//------ 점수 검사 메소드-------//
 
 	private class GameListener implements ActionListener {
 		
@@ -435,7 +339,7 @@ public class PlayScreen extends JPanel {
 
 					// text에 입력된 값을
 					// nInput에 넣는다.
-					judgement(nInput); // 2P에서 계속 사용될 예정이라 메소드를 만듬
+					judgement(nInput, nRandom); // 2P에서 계속 사용될 예정이라 메소드를 만듬
 					Count++;
 
 					record1p.addText(nInput, Strike, Ball);
@@ -505,6 +409,7 @@ public class PlayScreen extends JPanel {
 
 		}
 		
+		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
 		void moveBall(int n) {
 			// 쓰레드 구현
 			// -----------------------------------------
@@ -537,113 +442,140 @@ public class PlayScreen extends JPanel {
 			add(answerPanel);
 			repaint();
 			rightPanel.repaint();
-			// -----------------------------------------
 		}
-
+		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
+		
+		
+		//------------전광판에 공을 그려주는 매소드------------//
 		private void drawBalls(JPanel st, JPanel bl) {
 			JPanel strike = st;
 			JPanel ball = bl;
 			// call by reference 기 때문에 가능
-
+			
 			strike.removeAll();
 			ball.removeAll();
-
-			if (Ball == 0) {
-
-				black1 = new JLabel("", black, SwingConstants.CENTER);
-				black2 = new JLabel("", black, SwingConstants.CENTER);
-				black3 = new JLabel("", black, SwingConstants.CENTER);
-
-				ball.add(black1);
-				ball.add(black2);
-				ball.add(black3);
+			
+			strike.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+			ball.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
+			
+			
+			JLabel[] gBall = new JLabel[3];
+			JLabel[] yBall = new JLabel[3];
+			
+			
+			for (int i = 0; i <= 2; i++) {
+				gBall[i] = new JLabel(greenball);
+				ball.add(gBall[i]);
+				gBall[i].setVisible(true);
+				yBall[i] = new JLabel(yellowball);
+				strike.add(yBall[i]);
+				yBall[i].setVisible(true);
 			}
-
-			if (Ball == 1) {
-
-				greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
-				black1 = new JLabel("", black, SwingConstants.CENTER);
-				black2 = new JLabel("", black, SwingConstants.CENTER);
-
-				ball.add(greenball1);
-				ball.add(black1);
-				ball.add(black2);
+			
+			
+			for (int i = 0; i <= 2; i++) {
+				if (i + 1 <= Ball) { gBall[i].setVisible(true); }
+				else { gBall[i].setVisible(false); }
+				if (i + 1 <= Strike) { yBall[i].setVisible(true); }
+				else { yBall[i].setVisible(false);}
 			}
-			if (Ball == 2) {
-				greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
-				greenball2 = new JLabel("", greenball, SwingConstants.CENTER);
-				black1 = new JLabel("", black, SwingConstants.CENTER);
-				ball.add(greenball1);
-				ball.add(greenball2);
-				ball.add(black1);
-			}
-			if (Ball == 3) {
-				greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
-				greenball2 = new JLabel("", greenball, SwingConstants.CENTER);
-				greenball3 = new JLabel("", greenball, SwingConstants.CENTER);
-				ball.add(greenball1);
-				ball.add(greenball2);
-				ball.add(greenball3);
-			}
-			if (Strike == 0) {
+			
+			strike.revalidate();
+			strike.repaint();
+			ball.revalidate();
+			ball.repaint();
 
-				black1 = new JLabel("", black, SwingConstants.CENTER);
-				black2 = new JLabel("", black, SwingConstants.CENTER);
-				black3 = new JLabel("", black, SwingConstants.CENTER);
-
-				strike.add(black1);
-				strike.add(black2);
-				strike.add(black3);
-			}
-			if (Strike == 1) {
-
-				yellowball1 = new JLabel("", yellowball, SwingConstants.CENTER);
-				black1 = new JLabel("", black, SwingConstants.CENTER);
-				black2 = new JLabel("", black, SwingConstants.CENTER);
-
-				strike.add(yellowball1);
-				strike.add(black1);
-				strike.add(black2);
-
-			}
-			if (Strike == 2) {
-				yellowball1 = new JLabel("", yellowball, SwingConstants.CENTER);
-				yellowball2 = new JLabel("", yellowball, SwingConstants.CENTER);
-				black1 = new JLabel("", black, SwingConstants.CENTER);
-				strike.add(yellowball1);
-				strike.add(yellowball2);
-				strike.add(black1);
-			}
-			if (Strike == 3) {
-				yellowball1 = new JLabel(yellowball);
-				yellowball2 = new JLabel(yellowball);
-				yellowball3 = new JLabel(yellowball);
-				strike.add(yellowball1);
-				strike.add(yellowball2);
-				strike.add(yellowball3);
-				moveBall(flag);
-
-			}
-
+			// 전의 코드는 goto 100
 		}
+		//------------전광판에 공을 그려주는 매소드------------//
 
 	}
+
 
 	// get,set
-	public int getStrike() {
-		return Strike;
-	}
-
-	public int getBall() {
-		return Ball;
-	}
-
-	public int getCount() {
-		return Count;
-	}
-
-	public int getInput() {
-		return nInput;
-	}
+	public int getStrike() 	{return Strike;	}
+	public int getBall() 	{return Ball;	}
+	public int getCount() 	{return Count;	}
+	public int getInput() 	{return nInput;	}
 
 } // PlayScreen class
+
+
+/* 100 :
+ * 
+ * if (Ball == 0) {
+
+black1 = new JLabel("", black, SwingConstants.CENTER);
+black2 = new JLabel("", black, SwingConstants.CENTER);
+black3 = new JLabel("", black, SwingConstants.CENTER);
+
+ball.add(black1);
+ball.add(black2);
+ball.add(black3);
+}
+
+if (Ball == 1) {
+
+greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
+black1 = new JLabel("", black, SwingConstants.CENTER);
+black2 = new JLabel("", black, SwingConstants.CENTER);
+
+ball.add(greenball1);
+ball.add(black1);
+ball.add(black2);
+}
+if (Ball == 2) {
+greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
+greenball2 = new JLabel("", greenball, SwingConstants.CENTER);
+black1 = new JLabel("", black, SwingConstants.CENTER);
+ball.add(greenball1);
+ball.add(greenball2);
+ball.add(black1);
+}
+if (Ball == 3) {
+greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
+greenball2 = new JLabel("", greenball, SwingConstants.CENTER);
+greenball3 = new JLabel("", greenball, SwingConstants.CENTER);
+ball.add(greenball1);
+ball.add(greenball2);
+ball.add(greenball3);
+}
+if (Strike == 0) {
+
+black1 = new JLabel("", black, SwingConstants.CENTER);
+black2 = new JLabel("", black, SwingConstants.CENTER);
+black3 = new JLabel("", black, SwingConstants.CENTER);
+
+strike.add(black1);
+strike.add(black2);
+strike.add(black3);
+}
+if (Strike == 1) {
+
+yellowball1 = new JLabel("", yellowball, SwingConstants.CENTER);
+black1 = new JLabel("", black, SwingConstants.CENTER);
+black2 = new JLabel("", black, SwingConstants.CENTER);
+
+strike.add(yellowball1);
+strike.add(black1);
+strike.add(black2);
+
+}
+if (Strike == 2) {
+yellowball1 = new JLabel("", yellowball, SwingConstants.CENTER);
+yellowball2 = new JLabel("", yellowball, SwingConstants.CENTER);
+black1 = new JLabel("", black, SwingConstants.CENTER);
+strike.add(yellowball1);
+strike.add(yellowball2);
+strike.add(black1);
+}
+if (Strike == 3) {
+yellowball1 = new JLabel(yellowball);
+yellowball2 = new JLabel(yellowball);
+yellowball3 = new JLabel(yellowball);
+strike.add(yellowball1);
+strike.add(yellowball2);
+strike.add(yellowball3);
+moveBall(flag);
+
+}*/
