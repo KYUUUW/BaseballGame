@@ -270,11 +270,12 @@ public class PlayScreen extends JPanel {
 
 		while (true) {
 			String result = JOptionPane.showInputDialog(s + p + "P의 수를 입력하시오");
-			n = Integer.parseInt(result);
-			if (PropChk(n) == false) { // PropChk() 예외처리 메소드
+			
+			if (PropChk(result) == false) { // PropChk() 예외처리 메소드
 				s = new String("잘못 입력하셨습니다.\n");
 				continue;
 			}
+			n = Integer.parseInt(result);
 			System.out.println("input" + p + "P:" + n);
 			return n;
 		}
@@ -291,15 +292,27 @@ public class PlayScreen extends JPanel {
 	private boolean PropChk(int in) {
 		int[] n = convertToArr(in);
 		return !(n[2] == 0 || n[1] == 0 || n[0] == 0 || in < 111
-				|| n[2] == n[1] || n[1] == n[0] || n[0] == n[2]);
+				|| n[2] == n[1] || n[1] == n[0] || n[0] == n[2] || in > 999);
 	}
 
 	private boolean PropChk(int[] in) {
 		int[] n = in;
 		return !(n[2] == 0 || n[1] == 0 || n[0] == 0
 				|| (n[2] * 100 + n[1] * 10 + n[0]) < 111 || n[2] == n[1]
-				|| n[1] == n[0] || n[0] == n[2]);
+				|| n[1] == n[0] || n[0] == n[2] || (n[2] * 100 + n[1] * 10 + n[0]) > 999 );
 	}
+	
+	private boolean PropChk(String s) {
+		int n;
+		try {
+			n = Integer.parseInt(s);
+		}catch(NumberFormatException e){
+	        return false;
+	    } 
+		return PropChk(n);
+		
+	}
+	
 
 	protected void paintComponent(Graphics g) {
 		g.drawImage(bgimg, 10 + nRecordX, 10, 780, 440, this);
@@ -417,55 +430,60 @@ public class PlayScreen extends JPanel {
 
 			if (obj == txtInput || obj == btnInput) { // obj가 txtinput,btninput
 														// 이벤트를 받았을때
-				nInput = Integer.parseInt(txtInput.getText()); // text에 입력된 값을
-				// nInput에 넣는다.
-				judgement(nInput); // 2P에서 계속 사용될 예정이라 메소드를 만듬
-				Count++;
+				if (PropChk(txtInput.getText())) {
+					nInput = Integer.parseInt(txtInput.getText());
 
-				// record1p.setRSB(nInput, Strike, Ball); //record1p에 값
-				record1p.addText(nInput, Strike, Ball);
+					// text에 입력된 값을
+					// nInput에 넣는다.
+					judgement(nInput); // 2P에서 계속 사용될 예정이라 메소드를 만듬
+					Count++;
 
-				drawBalls(scoreBoardStrike, scoreBoardBall);
-				lblCount.setText("Count = " + Count);
+					record1p.addText(nInput, Strike, Ball);
 
-				if (nInput == nRandom && nPlay == 1) {
-					// lblResultS.setText("RIGHT");
-					// 쓰레드 구현
-					// -----------------------------------------
-					lblWin = new JLabel("YOU");
-					lblWin.setFont(new Font("Verdana", Font.BOLD, 100));
-					lblWin.setBounds(350, -50, 400, 400);
-					lblWin.setForeground(Color.magenta);
-					lblWin2 = new JLabel("WIN!");
-					lblWin2.setFont(new Font("Verdana", Font.BOLD, 100));
-					lblWin2.setBounds(350, 100, 400, 400);
-					lblWin2.setForeground(Color.magenta);
-					answerPanel = new JPanel();
-					answerPanel.setLayout(null);
-					mvBall = new MoveBallLabel();
-					mvBall.setBounds(0, -100, 200, 200);
-					answerPanel.add(mvBall);
-					mvBall.start();
-					answerPanel.add(lblWin);
-					answerPanel.add(lblWin2);
-					rightPanel.remove(lblCount);
-					rightPanel.remove(txtInput);
-					rightPanel.remove(btnInput);
-					rightPanel.remove(scoreBoardStrike);
-					rightPanel.remove(scoreBoardBall);
-					answerPanel
-							.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
-					answerPanel.setBackground(new Color(29, 29, 27));
-					add(answerPanel);
-					repaint();
-					// -----------------------------------------
+					drawBalls(scoreBoardStrike, scoreBoardBall);
+					lblCount.setText("Count = " + Count);
+
+					if (nInput == nRandom && nPlay == 1) {
+						// 쓰레드 구현
+						// -----------------------------------------
+						lblWin = new JLabel("YOU");
+						lblWin.setFont(new Font("Verdana", Font.BOLD, 100));
+						lblWin.setBounds(350, -50, 400, 400);
+						lblWin.setForeground(Color.magenta);
+						lblWin2 = new JLabel("WIN!");
+						lblWin2.setFont(new Font("Verdana", Font.BOLD, 100));
+						lblWin2.setBounds(350, 100, 400, 400);
+						lblWin2.setForeground(Color.magenta);
+						answerPanel = new JPanel();
+						answerPanel.setLayout(null);
+						mvBall = new MoveBallLabel();
+						mvBall.setBounds(0, -100, 200, 200);
+						answerPanel.add(mvBall);
+						mvBall.start();
+						answerPanel.add(lblWin);
+						answerPanel.add(lblWin2);
+						rightPanel.remove(lblCount);
+						rightPanel.remove(txtInput);
+						rightPanel.remove(btnInput);
+						rightPanel.remove(scoreBoardStrike);
+						rightPanel.remove(scoreBoardBall);
+						answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
+						answerPanel.setBackground(new Color(29, 29, 27));
+						add(answerPanel);
+						repaint();
+						// -----------------------------------------
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "올바른 수를 입력하십시오!");
 				}
 			}
 
 			// 여기서부터 2P
 			if (obj == btnInput1 || obj == txtInput1) {
-				int n = Integer.parseInt(txtInput1.getText());
-				if (PropChk(n)) {
+				
+				if (PropChk(txtInput1.getText())) {
+					int n = Integer.parseInt(txtInput1.getText());
 					judgement(n, num_2p);
 					System.out.println("1P judging");
 					Count++;
@@ -486,8 +504,9 @@ public class PlayScreen extends JPanel {
 			}
 
 			if (obj == btnInput2 || obj == txtInput2) {
-				int n = Integer.parseInt(txtInput2.getText());
-				if (PropChk(n)) {
+				
+				if (PropChk(txtInput2.getText())) {
+					int n = Integer.parseInt(txtInput2.getText());
 					judgement(n, num_1p);
 					System.out.println("2P judging");
 					Count++;

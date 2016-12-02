@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class MoveBallLabel extends JLabel implements Runnable{
 
 	ImageIcon icon;
