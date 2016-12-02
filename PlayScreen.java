@@ -47,12 +47,11 @@ public class PlayScreen extends JPanel {
 	private ImageIcon yellowball = new ImageIcon("img/yellowball.png");
 	private ImageIcon black = new ImageIcon("img/black.png");
 
-	private JLabel greenball1, greenball2, greenball3, yellowball1,
-			yellowball2, yellowball3;
+	private JLabel greenball1, greenball2, greenball3, 
+					yellowball1, yellowball2, yellowball3;
 	private JLabel black1, black2, black3;
 
 	private GameListener gameL;
-
 	private MoveBallLabel mvBall;
 
 	// record
@@ -69,7 +68,6 @@ public class PlayScreen extends JPanel {
 
 		gameL = new GameListener();
 
-		// this.setPreferredSize(new Dimension(800+nRecordX+nRecordX, 450));
 		this.setBackground(Color.white);
 		this.setLayout(null);
 
@@ -423,6 +421,8 @@ public class PlayScreen extends JPanel {
 	}
 
 	private class GameListener implements ActionListener {
+		
+		int flag=0;
 
 		public void actionPerformed(ActionEvent event) {
 			// int nInput;
@@ -443,36 +443,6 @@ public class PlayScreen extends JPanel {
 					drawBalls(scoreBoardStrike, scoreBoardBall);
 					lblCount.setText("Count = " + Count);
 
-					if (nInput == nRandom && nPlay == 1) {
-						// 쓰레드 구현
-						// -----------------------------------------
-						lblWin = new JLabel("YOU");
-						lblWin.setFont(new Font("Verdana", Font.BOLD, 100));
-						lblWin.setBounds(350, -50, 400, 400);
-						lblWin.setForeground(Color.magenta);
-						lblWin2 = new JLabel("WIN!");
-						lblWin2.setFont(new Font("Verdana", Font.BOLD, 100));
-						lblWin2.setBounds(350, 100, 400, 400);
-						lblWin2.setForeground(Color.magenta);
-						answerPanel = new JPanel();
-						answerPanel.setLayout(null);
-						mvBall = new MoveBallLabel();
-						mvBall.setBounds(0, -100, 200, 200);
-						answerPanel.add(mvBall);
-						mvBall.start();
-						answerPanel.add(lblWin);
-						answerPanel.add(lblWin2);
-						rightPanel.remove(lblCount);
-						rightPanel.remove(txtInput);
-						rightPanel.remove(btnInput);
-						rightPanel.remove(scoreBoardStrike);
-						rightPanel.remove(scoreBoardBall);
-						answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
-						answerPanel.setBackground(new Color(29, 29, 27));
-						add(answerPanel);
-						repaint();
-						// -----------------------------------------
-					}
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "올바른 수를 입력하십시오!");
@@ -482,6 +452,7 @@ public class PlayScreen extends JPanel {
 			// 여기서부터 2P
 			if (obj == btnInput1 || obj == txtInput1) {
 				
+				flag=1;
 				if (PropChk(txtInput1.getText())) {
 					int n = Integer.parseInt(txtInput1.getText());
 					judgement(n, num_2p);
@@ -505,6 +476,7 @@ public class PlayScreen extends JPanel {
 
 			if (obj == btnInput2 || obj == txtInput2) {
 				
+				flag=2;
 				if (PropChk(txtInput2.getText())) {
 					int n = Integer.parseInt(txtInput2.getText());
 					judgement(n, num_1p);
@@ -531,6 +503,41 @@ public class PlayScreen extends JPanel {
 				making.exeMainPanel();
 			}
 
+		}
+		
+		void moveBall(int n) {
+			// 쓰레드 구현
+			// -----------------------------------------
+			if (n == 0) {lblWin = new JLabel("YOU");}
+			else  {
+				lblWin = new JLabel(n + "P");
+			}
+			lblWin.setFont(new Font("Verdana", Font.BOLD, 100));
+			lblWin.setBounds(350, -50, 400, 400);
+			lblWin.setForeground(Color.magenta);
+			lblWin2 = new JLabel("WIN!");
+			lblWin2.setFont(new Font("Verdana", Font.BOLD, 100));
+			lblWin2.setBounds(350, 100, 400, 400);
+			lblWin2.setForeground(Color.magenta);
+			answerPanel = new JPanel();
+			answerPanel.setLayout(null);
+			mvBall = new MoveBallLabel();
+			mvBall.setBounds(0, -100, 200, 200);
+			answerPanel.add(mvBall);
+			mvBall.start();
+			answerPanel.add(lblWin);
+			answerPanel.add(lblWin2);
+			rightPanel.remove(lblCount);
+			rightPanel.remove(txtInput);
+			rightPanel.remove(btnInput);
+			rightPanel.remove(scoreBoardStrike);
+			rightPanel.remove(scoreBoardBall);
+			answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
+			answerPanel.setBackground(new Color(29, 29, 27));
+			add(answerPanel);
+			repaint();
+			rightPanel.repaint();
+			// -----------------------------------------
 		}
 
 		private void drawBalls(JPanel st, JPanel bl) {
@@ -614,6 +621,8 @@ public class PlayScreen extends JPanel {
 				strike.add(yellowball1);
 				strike.add(yellowball2);
 				strike.add(yellowball3);
+				moveBall(flag);
+
 			}
 
 		}
