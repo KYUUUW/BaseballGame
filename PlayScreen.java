@@ -25,23 +25,34 @@ import java.awt.event.*;
 
 public class PlayScreen extends JPanel {
 
-	private JPanel leftPanel, rightPanel;
-	private JPanel scoreBoardBall, scoreBoardStrike, answerPanel;
-	private JPanel sBoard1p_S, sBoard2p_S, sBoard1p_B, sBoard2p_B;
-	private JLabel lblResultS, lblResultB, lblCount, lblRecord, lblWin,
-			lblWin2;
-
-	private JTextField txtInput, txtInput1, txtInput2;
-	private JButton btnInput, btnInput1, btnInput2, btnHome;
-	private MakingPanel making;
-	private Image bgimg = null;
-
-	private int nRandom;
-	private int Strike, Ball, Count;
+	private JPanel  gamePanel, 	// 게임 진행을 위하 패널
+					sBoard_S,	// 1인용일때 Ball 전광판 패널	
+					sBoard_B, 	// 1인용일때 Strike 전광판 패널
+					
+					sBoard1p_S,	sBoard2p_S, // --- 2인용일때 각각의 strike ball 전광판 패널
+					sBoard1p_B, sBoard2p_B,
 	
-	private int nInput, nPlay;
+					answerPanel;	// 정답을 맞췄을때 나오는 패널
+	
+	private JLabel  lblCount;	// 몇회 게임을 진행했는지 세 주는 패널
 
-	private int num_1p, num_2p;
+	private JTextField	txtInput,				// 1인용을 실행 할 때 숫자 입력칸
+						txtInput1, txtInput2;	// 2인용을 실행할때 숫자 입력칸
+	
+	private JButton	btnInput,				// 1인용 일때 숫자 입력 버튼
+					btnInput1, btnInput2,	// 2인용 일때 숫자 입력 버튼
+					btnHome;				// 메인 화면으로 돌아가는 버튼
+	
+	private MakingPanel making;		// 업콜 구조를 위해 MakingPanel을 선언함
+	
+	private Image bgimg = null;		// 배경 이미지 저장 : 우선 null로 초기화
+
+	private int nRandom,		// 1P일때 컴퓨터가 생성한 랜덤의 3자리
+				Strike, Ball, 	// 그 턴의 스트라이크와 볼 저장
+				Count,			// 몇회 진행했는지 세는 변수
+				
+				nInput,
+				num_1p, num_2p;
 
 	private ImageIcon greenball = new ImageIcon("img/greenball.png");
 	private ImageIcon yellowball = new ImageIcon("img/yellowball.png");
@@ -59,64 +70,57 @@ public class PlayScreen extends JPanel {
 	private final int nRecordX = 200; // size조정용
 
 	public PlayScreen(MakingPanel m, int nPlayer) {
-
+		
+		this.setBackground(Color.black);
+		this.setLayout(null);
+		making = m;
+		
+		//---배경 이미지를 설정하기위해 데이터에 저장함.
 		Toolkit kit = Toolkit.getDefaultToolkit();
 		bgimg = kit.getImage("img/bgimg.png");
 		setLayout(null);
-
-		// Random 만드는것 onePlayer() 로 옮김.
-
-		gameL = new GameListener();
-
-		this.setBackground(Color.black);
-		this.setLayout(null);
-
-		making = m;
-
-
-		rightPanel = new JPanel();
-
+		
+		gamePanel = new JPanel(); //게임 진행을 위한 패널 생성
+		
 		btnHome = new JButton(making.getHomeIcon());
 		btnHome.setBounds(20, 20, 50, 50);
 		btnHome.addActionListener(gameL);
-		rightPanel.add(btnHome);
-		nPlay = nPlayer;
-		// 1P인지 2P인지
+		gamePanel.add(btnHome);
+
+		gameL = new GameListener();		
+		
+		//---1P이면 onePlayer(), 2P 이면 twoPlayer() 실행 
 		if (nPlayer == 1)
 			onePlayer();
 		else if (nPlayer == 2)
 			twoPlayer();
 	}
 
-	private void onePlayer() { // 1P 일 경우rightPanel = new JPanel();
+	private void onePlayer() { 
 
 		making.setFrameSize(BaseballConstants.SIZE_1P);
-		// rightPanel
-		rightPanel.setBounds(0 + nRecordX, 0, 800 + nRecordX, 500);
-		rightPanel.setOpaque(false); // 투명
-		rightPanel.setLayout(null);
-		add(rightPanel);
+		gamePanel.setBounds(0 + nRecordX, 0, 800 + nRecordX, 500);
+		gamePanel.setOpaque(false); // 투명
+		gamePanel.setLayout(null);
+		add(gamePanel);
 
-		// 예외 처리 : 0 안나오게, 111이하의 수 제거, 같은수 반복 제거
 		do {
 			nRandom = (int) (Math.random() * 999) + 1;
-		} while (!PropChk(nRandom)); // 같은수 반복 제거
+		} while (!PropChk(nRandom)); // 유효성 검사
 
 		System.out.println(nRandom);
 
 		// ball : scoreBoard
-		scoreBoardBall = new JPanel();
-		scoreBoardBall.setBounds(235, 126, 390, 75);
-		scoreBoardBall.setBackground(Color.BLACK);
-		// scoreBoardBall.setOpaque(false); //투명
-		rightPanel.add(scoreBoardBall);
+		sBoard_B = new JPanel();
+		sBoard_B.setBounds(235, 126, 390, 75);
+		sBoard_B.setBackground(Color.BLACK);
+		gamePanel.add(sBoard_B);
 
-		// strike : scoreBoardStrike
-		scoreBoardStrike = new JPanel();
-		scoreBoardStrike.setBounds(235, 51, 390, 75);
-		scoreBoardStrike.setBackground(Color.BLACK);
-		// scoreBoard.setOpaque(false); //투명
-		rightPanel.add(scoreBoardStrike);
+
+		sBoard_S = new JPanel();
+		sBoard_S.setBounds(235, 51, 390, 75);
+		sBoard_S.setBackground(Color.BLACK);
+		gamePanel.add(sBoard_S);
 
 		Count = 0;
 		lblCount = new JLabel("Count = " + Count);
@@ -125,18 +129,18 @@ public class PlayScreen extends JPanel {
 		lblCount.setBounds(225, 385, 350, 20);
 		lblCount.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCount.setVerticalAlignment(SwingConstants.CENTER);
-		rightPanel.add(lblCount);
+		gamePanel.add(lblCount);
 
 		txtInput = new JTextField();
 		txtInput.setBounds(255, 355, 200, 30);
-		txtInput.addActionListener(gameL); //
-		rightPanel.add(txtInput);
+		txtInput.addActionListener(gameL); 
+		gamePanel.add(txtInput);
 
 		btnInput = new JButton("Confirm");
 		btnInput.setBounds(465, 355, 100, 30);
 		btnInput.addActionListener(gameL);
 		btnInput.setFont(new Font("Verdana", Font.PLAIN, 15));
-		rightPanel.add(btnInput);
+		gamePanel.add(btnInput);
 
 
 		// record
@@ -150,11 +154,11 @@ public class PlayScreen extends JPanel {
 
 		making.setFrameSize(BaseballConstants.SIZE_2P);
 
-		// rightPanel 2p size
-		rightPanel.setBounds(0 + nRecordX, 0, 800 + nRecordX + nRecordX, 500);
-		rightPanel.setOpaque(false); // 투명
-		rightPanel.setLayout(null);
-		add(rightPanel);
+		// gamePanel 2p size
+		gamePanel.setBounds(0 + nRecordX, 0, 800 + nRecordX + nRecordX, 500);
+		gamePanel.setOpaque(false); // 투명
+		gamePanel.setLayout(null);
+		add(gamePanel);
 
 		// record
 		record1p = new RecordPanel();
@@ -172,31 +176,31 @@ public class PlayScreen extends JPanel {
 		lblCount.setBounds(225, 200, 350, 20);
 		lblCount.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCount.setVerticalAlignment(SwingConstants.CENTER);
-		rightPanel.add(lblCount);
+		gamePanel.add(lblCount);
 
 		txtInput1 = new JTextField();
 		txtInput1.setBounds(50, 355, 100, 30);
 		txtInput1.addActionListener(gameL);
-		rightPanel.add(txtInput1);
+		gamePanel.add(txtInput1);
 
 		txtInput2 = new JTextField();
 		txtInput2.setBounds(800 - 50 - 100 - 100, 355, 100, 30);
 		txtInput2.addActionListener(gameL); 
 		txtInput2.setEnabled(false);
-		rightPanel.add(txtInput2);
+		gamePanel.add(txtInput2);
 
 		btnInput1 = new JButton("1P Go");
 		btnInput1.setBounds(50 + 100, 355, 100, 30);
 		btnInput1.addActionListener(gameL);
 		btnInput1.setFont(new Font("Verdana", Font.PLAIN, 12));
-		rightPanel.add(btnInput1);
+		gamePanel.add(btnInput1);
 
 		btnInput2 = new JButton("2P Go");
 		btnInput2.setBounds(800 - 50 - 100, 355, 100, 30);
 		btnInput2.addActionListener(gameL);
 		btnInput2.setFont(new Font("Verdana", Font.PLAIN, 12));
 		btnInput2.setEnabled(false);
-		rightPanel.add(btnInput2);
+		gamePanel.add(btnInput2);
 
 		// 이미지 크기 변경 : 2인용으로
 		Image gBall = greenball.getImage();
@@ -214,22 +218,22 @@ public class PlayScreen extends JPanel {
 		sBoard1p_S = new JPanel();
 		sBoard1p_S.setBounds(235, 75, 52 * 3, 37);
 		sBoard1p_S.setBackground(Color.BLACK);
-		rightPanel.add(sBoard1p_S);
+		gamePanel.add(sBoard1p_S);
 
 		sBoard1p_B = new JPanel();
 		sBoard1p_B.setBounds(235, 140, 52 * 3, 37);
 		sBoard1p_B.setBackground(Color.BLACK);
-		rightPanel.add(sBoard1p_B);
+		gamePanel.add(sBoard1p_B);
 
 		sBoard2p_S = new JPanel();
 		sBoard2p_S.setBounds(445, 75, 52 * 3, 37);
 		sBoard2p_S.setBackground(Color.BLACK);
-		rightPanel.add(sBoard2p_S);
+		gamePanel.add(sBoard2p_S);
 
 		sBoard2p_B = new JPanel();
 		sBoard2p_B.setBounds(445, 140, 52 * 3, 37);
 		sBoard2p_B.setBackground(Color.BLACK);
-		rightPanel.add(sBoard2p_B);
+		gamePanel.add(sBoard2p_B);
 
 		// 입력 받기
 
@@ -238,6 +242,7 @@ public class PlayScreen extends JPanel {
 
 	}
 
+	//------다이얼로그로 입력 받는 메소드 -------//
 	private int inputDialog(int p) {
 		int n;
 		String s = new String("");
@@ -254,7 +259,9 @@ public class PlayScreen extends JPanel {
 			return n;
 		}
 	}
-
+	//------------------------------------//
+	
+	// ----- 세자리수를 배열로 바꿔주는 메소드 ------//
 	private int[] convertToArr(int n) {
 		int arr[] = new int[3];
 		arr[2] = n / 100;
@@ -262,6 +269,7 @@ public class PlayScreen extends JPanel {
 		arr[0] = n % 10;
 		return arr;
 	}
+	// ----- 세자리수를 배열로 바꿔주는 메소드 ------//
 
 	
 	//----------유효성 검사---------//
@@ -291,11 +299,6 @@ public class PlayScreen extends JPanel {
 				|| (n[2] * 100 + n[1] * 10 + n[0]) > 999 ); 	//세자리 수가 넘는 경우
 	}
 	//---------유효성 검사----------//
-	
-
-	protected void paintComponent(Graphics g) {
-		g.drawImage(bgimg, 10 + nRecordX, 10, 780, 440, this);
-	}
 
 
 	//------ 점수 검사 메소드-------//
@@ -323,6 +326,10 @@ public class PlayScreen extends JPanel {
 		}
 	}
 	//------ 점수 검사 메소드-------//
+	
+	protected void paintComponent(Graphics g) {
+		g.drawImage(bgimg, 10 + nRecordX, 10, 780, 440, this);
+	}
 
 	private class GameListener implements ActionListener {
 		
@@ -344,7 +351,7 @@ public class PlayScreen extends JPanel {
 
 					record1p.addText(nInput, Strike, Ball);
 
-					drawBalls(scoreBoardStrike, scoreBoardBall);
+					drawBalls(sBoard_S, sBoard_B);
 					lblCount.setText("Count = " + Count);
 
 				}
@@ -410,7 +417,10 @@ public class PlayScreen extends JPanel {
 		}
 		
 		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
-		void moveBall(int n) {
+		private void moveBall (int n) {
+			
+			JLabel lblWin, lblWin2;
+			
 			// 쓰레드 구현
 			// -----------------------------------------
 			if (n == 0) {lblWin = new JLabel("YOU");}
@@ -432,25 +442,27 @@ public class PlayScreen extends JPanel {
 			mvBall.start();
 			answerPanel.add(lblWin);
 			answerPanel.add(lblWin2);
-			rightPanel.remove(lblCount);
-			rightPanel.remove(txtInput);
-			rightPanel.remove(btnInput);
-			rightPanel.remove(scoreBoardStrike);
-			rightPanel.remove(scoreBoardBall);
+			gamePanel.remove(lblCount);
+			gamePanel.remove(txtInput);
+			gamePanel.remove(btnInput);
+			gamePanel.remove(sBoard_S);
+			gamePanel.remove(sBoard_B);
 			answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
 			answerPanel.setBackground(new Color(29, 29, 27));
 			add(answerPanel);
 			repaint();
-			rightPanel.repaint();
+			gamePanel.repaint();
+			
+			return;
 		}
 		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
 		
 		
 		//------------전광판에 공을 그려주는 매소드------------//
 		private void drawBalls(JPanel st, JPanel bl) {
+			
 			JPanel strike = st;
-			JPanel ball = bl;
-			// call by reference 기 때문에 가능
+			JPanel ball = bl; // 
 			
 			strike.removeAll();
 			ball.removeAll();
@@ -484,6 +496,8 @@ public class PlayScreen extends JPanel {
 			strike.repaint();
 			ball.revalidate();
 			ball.repaint();
+			
+			if (Strike == 3) { moveBall(flag); }
 
 			// 전의 코드는 goto 100
 		}
