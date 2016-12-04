@@ -75,7 +75,9 @@ public class PlayScreen extends JPanel {
 		this.setBackground(Color.black);	// 배경색
 		this.setLayout(null);				// 레이아웃 메니저 off
 		
-		making = m;							// 파라미터로 받아온 making의 주소를 class 지역변수에 저장
+		making = m;	// 파라미터로 받아온 making의 주소를 class 지역변수에 저장
+		
+		gameL = new GameListener();	//게임리스너 생성
 		
 		//---배경 이미지를 설정하기위해 데이터에 저장함.
 		Toolkit kit = Toolkit.getDefaultToolkit();
@@ -90,8 +92,7 @@ public class PlayScreen extends JPanel {
 		btnHome.setBounds(20, 20, 50, 50);
 		btnHome.addActionListener(gameL); //게임리스너를  추가
 		gamePanel.add(btnHome);
-
-		gameL = new GameListener();		
+	
 		
 		//---1P이면 onePlayer(), 2P 이면 twoPlayer() 실행 
 		if (nPlayer == 1)

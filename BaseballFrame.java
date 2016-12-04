@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class BaseballFrame extends JFrame {
+public class BaseballFrame extends JFrame {				//패널을 만드는 클래스
 	
 	BaseballFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -11,6 +11,5 @@ public class BaseballFrame extends JFrame {
 		getContentPane().add(primary);
 		pack();
 		setVisible(true);
-		setResizable(false);
 	}
 }
