@@ -429,15 +429,31 @@ public class PlayScreen extends JPanel {
 		}
 		
 		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
-		private void moveBall (int n) {
+		private void moveBall (int in) {
 			
 			JLabel lblWin, lblWin2;
-			
+			int n = in;
 			// 쓰레드 구현
 			// -----------------------------------------
-			if (n == 0) {lblWin = new JLabel("YOU");}
+			if (in == 0) {
+				lblWin = new JLabel("YOU");
+				gamePanel.remove(lblCount);
+				gamePanel.remove(txtInput);
+				gamePanel.remove(btnInput);
+				gamePanel.remove(sBoard_S);
+				gamePanel.remove(sBoard_B);
+				}
 			else  {
-				lblWin = new JLabel(n + "P");
+				lblWin = new JLabel(in + "P");
+				gamePanel.remove(lblCount);
+				gamePanel.remove(txtInput1);
+				gamePanel.remove(txtInput2);
+				gamePanel.remove(btnInput1);
+				gamePanel.remove(btnInput2);
+				gamePanel.remove(sBoard1p_S);
+				gamePanel.remove(sBoard2p_S);
+				gamePanel.remove(sBoard1p_B);
+				gamePanel.remove(sBoard2p_B);
 			}
 			lblWin.setFont(new Font("Verdana", Font.BOLD, 100));
 			lblWin.setBounds(350, -50, 400, 400);
@@ -454,11 +470,7 @@ public class PlayScreen extends JPanel {
 			mvBall.start();
 			answerPanel.add(lblWin);
 			answerPanel.add(lblWin2);
-			gamePanel.remove(lblCount);
-			gamePanel.remove(txtInput);
-			gamePanel.remove(btnInput);
-			gamePanel.remove(sBoard_S);
-			gamePanel.remove(sBoard_B);
+			
 			answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
 			answerPanel.setBackground(new Color(29, 29, 27));
 			add(answerPanel);
