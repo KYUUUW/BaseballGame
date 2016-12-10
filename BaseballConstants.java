@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
+// 상수를 저장하는 static 형클래스
 public class BaseballConstants {
 
 	public static final Dimension SIZE_MAIN = new Dimension(1040,530);			//프레임의 메인 크기

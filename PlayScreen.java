@@ -429,10 +429,9 @@ public class PlayScreen extends JPanel {
 		}
 		
 		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
-		private void moveBall (int in) {
-			
-			JLabel lblWin, lblWin2;
-			int n = in;
+		private void moveBall(int in) {
+
+			JLabel lblWin, lblWin2; // JLabel 2개를 이용하여 누가 이겼는지 알려준다.
 			// 쓰레드 구현
 			// -----------------------------------------
 			if (in == 0) {
@@ -442,8 +441,7 @@ public class PlayScreen extends JPanel {
 				gamePanel.remove(btnInput);
 				gamePanel.remove(sBoard_S);
 				gamePanel.remove(sBoard_B);
-				}
-			else  {
+			} else {
 				lblWin = new JLabel(in + "P");
 				gamePanel.remove(lblCount);
 				gamePanel.remove(txtInput1);
@@ -455,29 +453,29 @@ public class PlayScreen extends JPanel {
 				gamePanel.remove(sBoard1p_B);
 				gamePanel.remove(sBoard2p_B);
 			}
-			lblWin.setFont(new Font("Verdana", Font.BOLD, 100));
-			lblWin.setBounds(350, -50, 400, 400);
-			lblWin.setForeground(Color.magenta);
-			lblWin2 = new JLabel("WIN!");
-			lblWin2.setFont(new Font("Verdana", Font.BOLD, 100));
-			lblWin2.setBounds(350, 100, 400, 400);
-			lblWin2.setForeground(Color.magenta);
-			answerPanel = new JPanel();
-			answerPanel.setLayout(null);
-			mvBall = new MoveBallLabel();
-			mvBall.setBounds(0, -100, 200, 200);
-			answerPanel.add(mvBall);
-			mvBall.start();
-			answerPanel.add(lblWin);
+			lblWin.setFont(new Font("Verdana", Font.BOLD, 100));// 폰트지정
+			lblWin.setBounds(350, -50, 400, 400); // 위치지정
+			lblWin.setForeground(Color.magenta); // 배경색 지정
+			lblWin2 = new JLabel("WIN!"); // 새로운 라벨 생성
+			lblWin2.setFont(new Font("Verdana", Font.BOLD, 100));// 폰트지정
+			lblWin2.setBounds(350, 100, 400, 400); // 위치지정
+			lblWin2.setForeground(Color.magenta); // 배경색지정
+			answerPanel = new JPanel(); // 새로운 패널을 생성한다.
+			answerPanel.setLayout(null); // 레이아웃을 null로 지정한다.
+			mvBall = new MoveBallLabel(); // MoveBallLabel클래스의 객체를 생성한다.
+			mvBall.setBounds(0, -100, 200, 200); // 위치를 지정한다.
+			answerPanel.add(mvBall); // mvBall을 추가한다.
+			mvBall.start(); // 스레드를 시작한다.
+			answerPanel.add(lblWin); // 패널에 라벨을 추가해 누가이겼는지 알려준다.
 			answerPanel.add(lblWin2);
-			
-			answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);
-			answerPanel.setBackground(new Color(29, 29, 27));
-			add(answerPanel);
-			repaint();
+
+			answerPanel.setBounds(0 + nRecordX, 0, 1000 + nRecordX, 500);// 위치를
+																			// 지정한다.
+			answerPanel.setBackground(new Color(29, 29, 27)); // 배경색을 지정한다.
+			add(answerPanel); // 화면에 나오게 한다.
+			repaint(); // refresh
 			gamePanel.repaint();
-			
-			return;
+			btnHome.repaint(); // 홈버튼이 가려지는것 해결
 		}
 		//-----------이겼을때 공이 움직이는 것을 보여주는 메소드 --------//
 		
@@ -533,83 +531,3 @@ public class PlayScreen extends JPanel {
 
 
 } // PlayScreen class
-
-
-/* 100 :
- * 
- * if (Ball == 0) {
-
-black1 = new JLabel("", black, SwingConstants.CENTER);
-black2 = new JLabel("", black, SwingConstants.CENTER);
-black3 = new JLabel("", black, SwingConstants.CENTER);
-
-ball.add(black1);
-ball.add(black2);
-ball.add(black3);
-}
-
-if (Ball == 1) {
-
-greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
-black1 = new JLabel("", black, SwingConstants.CENTER);
-black2 = new JLabel("", black, SwingConstants.CENTER);
-
-ball.add(greenball1);
-ball.add(black1);
-ball.add(black2);
-}
-if (Ball == 2) {
-greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
-greenball2 = new JLabel("", greenball, SwingConstants.CENTER);
-black1 = new JLabel("", black, SwingConstants.CENTER);
-ball.add(greenball1);
-ball.add(greenball2);
-ball.add(black1);
-}
-if (Ball == 3) {
-greenball1 = new JLabel("", greenball, SwingConstants.CENTER);
-greenball2 = new JLabel("", greenball, SwingConstants.CENTER);
-greenball3 = new JLabel("", greenball, SwingConstants.CENTER);
-ball.add(greenball1);
-ball.add(greenball2);
-ball.add(greenball3);
-}
-if (Strike == 0) {
-
-black1 = new JLabel("", black, SwingConstants.CENTER);
-black2 = new JLabel("", black, SwingConstants.CENTER);
-black3 = new JLabel("", black, SwingConstants.CENTER);
-
-strike.add(black1);
-strike.add(black2);
-strike.add(black3);
-}
-if (Strike == 1) {
-
-yellowball1 = new JLabel("", yellowball, SwingConstants.CENTER);
-black1 = new JLabel("", black, SwingConstants.CENTER);
-black2 = new JLabel("", black, SwingConstants.CENTER);
-
-strike.add(yellowball1);
-strike.add(black1);
-strike.add(black2);
-
-}
-if (Strike == 2) {
-yellowball1 = new JLabel("", yellowball, SwingConstants.CENTER);
-yellowball2 = new JLabel("", yellowball, SwingConstants.CENTER);
-black1 = new JLabel("", black, SwingConstants.CENTER);
-strike.add(yellowball1);
-strike.add(yellowball2);
-strike.add(black1);
-}
-if (Strike == 3) {
-yellowball1 = new JLabel(yellowball);
-yellowball2 = new JLabel(yellowball);
-yellowball3 = new JLabel(yellowball);
-strike.add(yellowball1);
-strike.add(yellowball2);
-strike.add(yellowball3);
-moveBall(flag);
-
-}*/
